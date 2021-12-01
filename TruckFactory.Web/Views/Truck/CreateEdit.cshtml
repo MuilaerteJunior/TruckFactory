@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using TruckFactory.Web.Application.Shared
+@using TruckFactory.Web.Models
+@model TruckFormModel
+
+@{
+    var actionName = "Edit";
+    var title = "Editing Truck";
+    if  ( Model == null || !Model.Id.HasValue)
+    {
+        actionName = "Create";
+        title = "Creating Truck";
+    }
+
+    ViewData["Title"] = title;
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+
+@using(Html.BeginForm(actionName,"Truck",FormMethod.Post))
+{
+    @Html.ValidationSummary();
+    <div class="form-group">
+        @Html.HiddenFor(m => m.Id)
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Model's name"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ProductionYear)
+        @Html.TextBoxFor(m => m.ProductionYear, new { @class = "form-control", @readonly = "readonly", type = "number"})
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.ModelYear)
+        @Html.TextBoxFor(m => m.ModelYear, new { @class = "form-control" , type = "number"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Model)
+        @Html.DropDownListFor(m => m.Model, ( IEnumerable<SelectListItem> ) ViewData["TruckModelOptions"], new { @class = "form-control", placeholder = "Model's name"})
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-secondary">Cancel</button>
+    </div>
+    
+}
+
+
+
+

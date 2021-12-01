@@ -1,0 +1,65 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using TruckFactory.Web.Models
+@model IEnumerable<TruckFormModel>
+@{
+    ViewData["Title"] = "Trucks List";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+
+<p />
+
+<div class="container">
+     <a href="@Url.Action("Create", "Truck")" class="btn btn-primary">New truck</a>
+</div>
+
+<div class="container text-center">
+    @{
+
+        <text>
+            <div class="row header">
+                <div class="col-sm"><strong>Name</strong></div>
+                <div class="col-sm"><strong>Mode</strong>l</div>
+                <div class="col-sm"><strong>Model's Year</strong></div>
+                <div class="col-sm"><strong>Production's year</strong></div>
+                <div class="col-sm-1"> </div>
+                <div class="col-sm-1"> </div>
+            </div>
+        </text>
+        if (Model != null ){
+            foreach (var  item in Model)
+            {
+                <text>
+                    <div class="row">
+                        <div class="col-sm">@item.Name</div>
+                        <div class="col-sm">@item.Model</div>
+                        <div class="col-sm">@item.ModelYear</div>
+                        <div class="col-sm">@item.ProductionYear</div>
+                        <div class="col-sm-1">
+                        
+                            <a href="@Url.Action("Edit", "Truck" , new { id = item.Id })">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-1">
+                            <a href="@Url.Action("Delete", "Truck" , new { id = item.Id })" class="button">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </text>
+            }
+        } else
+        {
+            <div class="row">
+                <div class="col-sm">
+                    No results
+                </div>
+            </div>
+        }
+    }
+</div>

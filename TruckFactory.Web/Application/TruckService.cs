@@ -21,13 +21,19 @@ namespace TruckFactory.Web.Application.Services
         internal IEnumerable<TruckFormModel> GetAll()
         {
             var r = _repo.GetAll();
-            IEnumerable<TruckFormModel> result = r.Select(item => new TruckFormModel
+            IEnumerable<TruckFormModel> result = r.Select(item =>
             {
-                Id = item.Id,
-                Name = item.Name,
-                Model = (EnumTruckModel)item.Model.Id,
-                ModelYear = item.ModelYear,
-                ProductionYear = item.ProductionYear
+                if (item.Model == null)
+                    throw new NullReferenceException();
+
+                return new TruckFormModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Model = (EnumTruckModel)item.Model.Id,
+                    ModelYear = item.ModelYear,
+                    ProductionYear = item.ProductionYear
+                };
             });
             return result;
         }
@@ -42,7 +48,7 @@ namespace TruckFactory.Web.Application.Services
             });
         }
 
-        internal TruckFormModel GetDefault()
+        internal  TruckFormModel GetDefault()
         {
             var dtNow = DateTime.Now;
             return new TruckFormModel
@@ -74,7 +80,6 @@ namespace TruckFactory.Web.Application.Services
             {
                 Name = truckForm.Name,
                 ID_TRUCK_MODEL = (short)truckForm.Model,
-                Model = null,
                 ModelYear = truckForm.ModelYear,
                 ProductionYear = DateTime.Now.Year
             };
@@ -88,22 +93,24 @@ namespace TruckFactory.Web.Application.Services
                 throw new ArgumentException("Missing truck identification");
 
             var t2 = _repo.Get(truckForm.Id.Value);
-
-            t2.Name = truckForm.Name;
-            t2.ID_TRUCK_MODEL = (short)truckForm.Model;
-            t2.ModelYear = truckForm.ModelYear;
-            _repo.Update(t2);
+            if (t2 != null)
+            {
+                t2.Name = truckForm.Name;
+                t2.ID_TRUCK_MODEL = (short)truckForm.Model;
+                t2.ModelYear = truckForm.ModelYear;
+                _repo.Update(t2);
+            }
         }
 
-        public TruckFormModel Get(int id)
+        public TruckFormModel? Get(int id)
         {
             var r = _repo.Get(id);
-            if (r != null)
+            if (r != null && r.Model != null)
             {
                 return new TruckFormModel()
                 {
                     Id = r.Id,
-                    Model = (EnumTruckModel)r.Model.Id,
+                    Model = (EnumTruckModel) r.Model.Id,
                     ModelYear = r.ModelYear,
                     Name = r.Name,
                     ProductionYear = r.ProductionYear

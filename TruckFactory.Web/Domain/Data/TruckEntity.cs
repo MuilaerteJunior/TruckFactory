@@ -4,9 +4,9 @@
     {
         public int? Id { get; set; }
         
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public TruckModelEntity Model { get; set; }
+        public TruckModelEntity? Model { get; set; }
 
         public int ProductionYear { get; set; }//Must be current
         public int ModelYear { get; set; }//Current or >

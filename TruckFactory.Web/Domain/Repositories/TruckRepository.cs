@@ -4,7 +4,7 @@ namespace TruckFactory.Web.Domain.Repositories
 {
     public class TruckRepository
     {
-        private FactoryContext _db;
+        private readonly FactoryContext _db;
 
         public TruckRepository(FactoryContext db)
         {
@@ -16,19 +16,22 @@ namespace TruckFactory.Web.Domain.Repositories
             _db.Trucks.Add(entity);
             _db.SaveChanges();
 
-            return entity.Id.Value;
+            return entity.Id ?? -1;
         }
 
-        public TruckEntity Get(int id)
+        public TruckEntity? Get(int id)
         {
             return _db.Trucks
                     .Include(a => a.Model)//This could be done using lazy loading
-                    .FirstOrDefault(t => t.Id == id);
+                    .FirstOrDefault(t => t.Id == id) ;
         }
 
         internal bool Delete(int id)
         {
             var truck = _db.Trucks.FirstOrDefault(t => t.Id == id);
+            if (truck == null)
+                throw new ArgumentException("Can't find the element");
+
             _db.Trucks.Remove(truck);
             _db.SaveChanges();
             return true;

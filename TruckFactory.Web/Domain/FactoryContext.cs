@@ -12,8 +12,8 @@ namespace TruckFactory.Web.Domain
 #endif
         }
 
-        public DbSet<TruckEntity> Trucks { get; set; }
-        public DbSet<TruckModelEntity> TruckModels { get; set; }
+        public DbSet<TruckEntity> Trucks { get; set; } = null!;
+        public DbSet<TruckModelEntity> TruckModels { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder opts)
         {
